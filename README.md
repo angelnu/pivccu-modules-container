@@ -7,6 +7,10 @@ also make it easier for container and Kubernetes based platforms.
 
 It is WIP so it might still change
 
+## Acknoledgements
+
+All kernel modules used here come from the [piVCCU](https://github.com/alexreinert/piVCCU) project.
+
 ## How to build
 
 `docker build -t pivccu-modules-container`
@@ -18,8 +22,16 @@ It is WIP so it might still change
 - sources for the running kernel must be installed in the host
 - kernel must be at least 4.14
 
+### Comamand
+
 `docker run --rm -v /lib/modules:/lib/modules -v /usr/src:/usr/src_host modules`
 
-## Acknoledgements
+**NOTE**: this command will add the binary kernel modules to the `/lib/modules/<running kernel>/updates/dkms` folder.
 
-All kernel modules used here come from the [piVCCU](https://github.com/alexreinert/piVCCU) project.
+If the modules are already installed for the running kernel the module will not replace them
+
+## Missing
+
+- [ ] Detect if the installed kernel modules are in a different version and replace them when this is the case.
+- [ ] Add to different exploiters.
+- [ ] Decide if it stays as stand-alone project or integrated into another larger project.
