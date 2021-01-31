@@ -19,7 +19,7 @@ env:
   # NOTE: secrets cannot be access directly in conditions
   # https://github.com/actions/runner/issues/520
   SECRETS_ARE_AVAILABLE: ${{ secrets.CR_PAT != '' }}
-  
+
 jobs:
   # Push image to GitHub Packages.
   # See also https://docs.docker.com/docker-hub/builds/
@@ -62,11 +62,11 @@ jobs:
           if [[ ${GITHUB_EVENT_NAME} == 'schedule' || ${GITHUB_EVENT_NAME} == 'workflow_dispatch' ]]; then
             TAG_TYPE="snapshot"
           else
-            TAG_TYPE="snapshot"
+            TAG_TYPE="dev"
           fi
           
           BRANCH="${GITHUB_REF##*/}"
-          if [[ ${BRANCH} == 'master' ]]; then
+          if [[ ${BRANCH} == 'master' ]] || ${BRANCH} == 'main'; then
             BRANCH_TAG="${BASE_TAG}:${TAG_TYPE}"
           else
             BRANCH_TAG="${BASE_TAG}:${TAG_TYPE}-${BRANCH}"
@@ -82,7 +82,7 @@ jobs:
         with:
           context: .
           file: Dockerfile
-          platforms: linux/amd64,linux/arm64,linux/arm
+          platforms: linux/amd64 #,linux/arm64,linux/arm
           push: ${{ env.SECRETS_ARE_AVAILABLE }}
 
           labels: |
