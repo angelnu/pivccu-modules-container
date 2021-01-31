@@ -20,8 +20,8 @@ jobs:
   # See also https://docs.docker.com/docker-hub/builds/
   push:
 
-    name: "Build and push"
-    runs-on: ubuntu-latest
+    name: OCI/Docker Build+Push
+    runs-on: ubuntu-20.04
     if: github.event_name == 'push'
 
     steps:
@@ -75,8 +75,6 @@ jobs:
           platforms: linux/amd64,linux/arm64,linux/arm
           push: true
 
-          build-args: |
-            tar_prefix=RaspberryMatic-${{ env.BUILD_VERSION }}-oci_
           labels: |
             org.opencontainers.image.title=pivccu-modules-container
             org.opencontainers.image.description=Install pivccu modules into your host
