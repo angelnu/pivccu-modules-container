@@ -15,6 +15,11 @@ on:
   
   workflow_dispatch:
 
+env:
+  # NOTE: secrets cannot be access directly in conditions
+  # https://github.com/actions/runner/issues/520
+  SECRETS_ARE_AVAILABLE: ${{ secrets.CR_PAT != '' }}
+  
 jobs:
   # Push image to GitHub Packages.
   # See also https://docs.docker.com/docker-hub/builds/
@@ -33,9 +38,14 @@ jobs:
           install: true
       
       - uses: actions/checkout@v2
-
-      - name: Log into registry
-        run: echo "${{ secrets.GITHUB_TOKEN }}" | docker login docker.pkg.github.com -u ${{ github.actor }} --password-stdin
+    
+      - name: Login to GitHub Container Registry
+        uses: docker/login-action@v1
+        with:
+          registry: ghcr.io
+          username: ${{ github.repository_owner }}
+          password: ${{ secrets.CR_PAT }}
+        if: env.SECRETS_ARE_AVAILABLE == 'true'
       
       - name: Setup Environment
         id: env
@@ -73,7 +83,7 @@ jobs:
           context: .
           file: Dockerfile
           platforms: linux/amd64,linux/arm64,linux/arm
-          push: true
+          push: ${{ env.SECRETS_ARE_AVAILABLE }}
 
           labels: |
             org.opencontainers.image.title=pivccu-modules-container
