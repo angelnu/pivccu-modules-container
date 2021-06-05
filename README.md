@@ -2,10 +2,10 @@
 
 This project created a container images that installs the piVCCU into a Linux based host.
 
-The obojective is deploying via container to reduce the dependencies on the host OS and
+The objective was deploying via container to reduce the dependencies on the host OS and
 also make it easier for container and Kubernetes based platforms.
 
-It is WIP so it might still change
+This project is abandoned.
 
 ## Acknoledgements
 
